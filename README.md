@@ -134,7 +134,7 @@ AuthFlow/
 
 ## 🌐 Live Demo (Add these after deployment)
 
-- 🔗 [Frontend on Vercel](https://your-frontend-link.vercel.app)
+- 🔗 [Frontend on Vercel](https://auth-flow-coral.vercel.app/)
 - 🔗 [Backend on Render](https://your-backend-link.onrender.com)
 
 ---
