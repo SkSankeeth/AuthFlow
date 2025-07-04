@@ -6,50 +6,42 @@ const ProtectedContent = ({ token, onLogout }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // useEffect hook to fetch protected data when the component mounts or token changes
   useEffect(() => {
     const fetchProtectedData = async () => {
-      setIsLoading(true); // Set loading state
-      setMessage(''); // Clear any previous messages
+      setIsLoading(true);
+      setMessage('');
       try {
-        // Send a GET request to the protected backend endpoint
         const response = await fetch('http://localhost:5000/api/protected', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            // IMPORTANT: Send the JWT in the Authorization header as a Bearer token
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`, // Send JWT in Authorization header
           },
         });
 
-        const result = await response.json(); // Parse the JSON response
+        const result = await response.json();
 
-        if (response.ok) { // Check for successful HTTP status
-          setData(result.message); // Set the protected data message
+        if (response.ok) {
+          setData(result.message);
         } else {
-          // Display error message from backend or a default one
           setMessage(result.message || 'Failed to fetch protected data.');
-          // If the server responds with 401 (Unauthorized) or 403 (Forbidden),
-          // it means the token is invalid or expired, so log the user out.
           if (response.status === 401 || response.status === 403) {
-            onLogout(); // Call the logout handler from App.js
+            onLogout();
             setMessage('Your session has expired or is invalid. Please log in again.');
           }
         }
       } catch (error) {
-        // Handle network errors
         setMessage('An error occurred while fetching protected data.');
         console.error('Protected content fetch error:', error);
       } finally {
-        setIsLoading(false); // Reset loading state
+        setIsLoading(false);
       }
     };
 
-    // Only fetch data if a token exists
     if (token) {
       fetchProtectedData();
     }
-  }, [token, onLogout]); // Dependencies: re-run effect if token or onLogout changes
+  }, [token, onLogout]);
 
   return (
     <div className="text-center">
@@ -63,7 +55,7 @@ const ProtectedContent = ({ token, onLogout }) => {
       )}
 
       <button
-        onClick={onLogout} // Call the logout handler when button is clicked
+        onClick={onLogout}
         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
       >
         Logout

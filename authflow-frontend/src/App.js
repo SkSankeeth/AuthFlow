@@ -4,28 +4,24 @@ import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import ProtectedContent from './components/ProtectedContent';
 
-// Main App component
 const App = () => {
-  const [activeTab, setActiveTab] = useState('login'); // 'login' or 'signup'
+  const [activeTab, setActiveTab] = useState('login');
   const [message, setMessage] = useState('');
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [isFlipped, setIsFlipped] = useState(false); // New state for flip animation
-  const [showFront, setShowFront] = useState(true); // Controls which form is visible during flip
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [showFront, setShowFront] = useState(true);
 
-  // Ref to manage animation timing
   const flipTimeoutRef = useRef(null);
 
-  // Effect to handle messages (e.g., clear after a few seconds)
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
         setMessage('');
-      }, 5000); // Clear message after 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [message]);
 
-  // Effect to manage flip animation logic (simplified)
   useEffect(() => {
     if (activeTab === 'protected') {
       setIsFlipped(false);
@@ -37,7 +33,6 @@ const App = () => {
     }
   }, [activeTab]);
 
-  // Cleanup timeout on component unmount
   useEffect(() => {
     return () => {
       if (flipTimeoutRef.current) {
@@ -46,8 +41,6 @@ const App = () => {
     };
   }, []);
 
-
-  // Handle successful login/signup and token storage
   const handleAuthSuccess = (newToken) => {
     setToken(newToken);
     localStorage.setItem('token', newToken);
@@ -61,7 +54,6 @@ const App = () => {
     }
   };
 
-  // Handle user logout
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem('token');
@@ -75,7 +67,6 @@ const App = () => {
     }
   };
 
-  // Handles the tab change and initiates the flip animation
   const handleTabChange = (tabName) => {
     if (flipTimeoutRef.current) {
       clearTimeout(flipTimeoutRef.current);
@@ -93,7 +84,6 @@ const App = () => {
     }
     setActiveTab(tabName);
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4 overflow-hidden font-inter text-gray-800">
@@ -119,7 +109,7 @@ const App = () => {
           width: 100%;
           height: 100%;
           text-align: center;
-          transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* More dynamic cubic-bezier */
+          transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
           transform-style: preserve-3d;
         }
 
@@ -147,51 +137,51 @@ const App = () => {
 
         /* New Age UI Enhancements */
         .card-glow {
-          background: linear-gradient(145deg, #ffffff, #f7f9fc); /* Softer white gradient */
-          border: 1px solid rgba(220, 230, 240, 0.5); /* Subtle border */
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 0 0 3px rgba(100, 149, 237, 0.1); /* Deeper shadow, subtle blue ring */
-          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+          background: linear-gradient(145deg, #ffffff, #f7f9fc);
+          border: 1px solid rgba(220, 230, 240, 0.5);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), 0 0 0 3px rgba(100, 149, 237, 0.1);
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .card-glow:hover {
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), 0 0 0 4px rgba(100, 149, 237, 0.2);
-          transform: translateY(-5px); /* More pronounced lift */
+          transform: translateY(-5px);
         }
 
         /* Button hover effects */
         .tab-button {
           transition: all 0.3s ease-in-out;
           border: 1px solid transparent;
-          font-weight: 500; /* Medium weight */
-          letter-spacing: 0.025em; /* Tailwind tracking-wide */
-          transform: translateZ(0); /* Force hardware acceleration */
+          font-weight: 500;
+          letter-spacing: 0.025em;
+          transform: translateZ(0);
         }
         .tab-button:hover {
-          transform: translateY(-3px); /* Slightly more lift */
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18); /* Stronger shadow on hover */
+          transform: translateY(-3px);
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.18);
         }
         .tab-button.active {
-          background-image: linear-gradient(to right, #6a5acd, #4a90e2); /* Purple to blue gradient */
-          box-shadow: 0 5px 20px rgba(106, 90, 205, 0.5); /* Stronger glow for active */
+          background-image: linear-gradient(to right, #6a5acd, #4a90e2);
+          box-shadow: 0 5px 20px rgba(106, 90, 205, 0.5);
           color: white;
           border-color: transparent;
-          transform: translateY(-1px); /* Subtle lift when active */
+          transform: translateY(-1px);
         }
         .tab-button.inactive {
-          background-color: #eef2f6; /* Lighter gray */
-          color: #64748b; /* Slate gray text */
-          border-color: #d1d5db; /* Lighter border */
+          background-color: #eef2f6;
+          color: #64748b;
+          border-color: #d1d5db;
         }
 
         /* Input focus effects */
         input {
-          border: 1px solid #e2e8f0; /* default border */
+          border: 1px solid #e2e8f0;
           transition: all 0.3s ease-in-out;
-          padding: 0.75rem 1rem; /* More generous padding */
-          border-radius: 0.5rem; /* Rounded corners */
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
         }
         input:focus {
-          border-color: #6a5acd; /* Purple-ish focus */
-          box-shadow: 0 0 0 4px rgba(106, 90, 205, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Soft glow + inner shadow */
+          border-color: #6a5acd;
+          box-shadow: 0 0 0 4px rgba(106, 90, 205, 0.25), inset 0 1px 3px rgba(0, 0, 0, 0.1);
           outline: none;
         }
 
@@ -217,22 +207,22 @@ const App = () => {
 
         /* Submit button styling */
         .submit-button {
-          background-image: linear-gradient(to right, #4a90e2, #6a5acd); /* Blue to purple gradient */
+          background-image: linear-gradient(to right, #4a90e2, #6a5acd);
           color: white;
-          font-weight: 600; /* Semi-bold */
-          padding: 0.75rem 1.5rem; /* More padding */
-          border-radius: 0.75rem; /* More rounded */
-          box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4); /* Stronger shadow */
+          font-weight: 600;
+          padding: 0.75rem 1.5rem;
+          border-radius: 0.75rem;
+          box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
           transition: all 0.3s ease-in-out;
-          border: none; /* No default border */
+          border: none;
           cursor: pointer;
         }
         .submit-button:hover {
-          transform: translateY(-2px) scale(1.02); /* Slight lift and scale */
+          transform: translateY(-2px) scale(1.02);
           box-shadow: 0 8px 20px rgba(74, 144, 226, 0.5);
         }
         .submit-button:active {
-          transform: translateY(0) scale(0.98); /* Press effect */
+          transform: translateY(0) scale(0.98);
           box-shadow: 0 2px 5px rgba(74, 144, 226, 0.3);
         }
         .submit-button:disabled {
@@ -244,22 +234,17 @@ const App = () => {
         `}
       </style>
 
-      {/* Main card container with styling and a minimum height */}
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md min-h-[520px] flex flex-col card-glow">
-        {/* Title always visible */}
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800 tracking-wide">AuthFlow</h1>
 
-        {/* Message display area always visible */}
         {message && (
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-md relative mb-4 w-full animate-fade-in">
             <span className="block sm:inline">{message}</span>
           </div>
         )}
 
-        {/* Conditional rendering for authentication forms or protected content */}
-        {!token ? ( // If no token, show login/signup forms with flip effect
+        {!token ? (
           <>
-            {/* Tab buttons for Login/Signup */}
             <div className="flex justify-center mb-6 w-full">
               <button
                 className={`px-4 py-2 rounded-l-lg tab-button ${
@@ -283,10 +268,8 @@ const App = () => {
               </button>
             </div>
 
-            {/* Flip card container takes remaining vertical space */}
             <div className="flip-card-container flex-grow">
               <div className={`flip-card-inner ${isFlipped ? 'flipped' : ''}`}>
-                {/* Front of the card (Login Form) */}
                 <div className="flip-card-front">
                   {(showFront && activeTab === 'login') && (
                     <div className="form-content-wrapper">
@@ -296,7 +279,6 @@ const App = () => {
                   {!(showFront && activeTab === 'login') && <div className="flex-grow"></div>}
                 </div>
 
-                {/* Back of the card (Signup Form) */}
                 <div className="flip-card-back">
                   {(!showFront && activeTab === 'signup') && (
                     <div className="form-content-wrapper">
@@ -308,7 +290,7 @@ const App = () => {
               </div>
             </div>
           </>
-        ) : ( // If token exists, show protected content directly
+        ) : (
           <div className="flex-grow flex items-center justify-center">
             <ProtectedContent token={token} onLogout={handleLogout} />
           </div>
@@ -318,5 +300,4 @@ const App = () => {
   );
 };
 
-// Export the main App component as default
 export default App;

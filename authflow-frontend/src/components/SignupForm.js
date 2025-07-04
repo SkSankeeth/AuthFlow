@@ -10,7 +10,7 @@ const SignupForm = ({ onAuthSuccess, setMessage }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setMessage(''); // Clear any previous messages
+    setMessage('');
 
     try {
       const response = await fetch('http://localhost:5000/api/auth/signup', {
@@ -21,43 +21,26 @@ const SignupForm = ({ onAuthSuccess, setMessage }) => {
         body: JSON.stringify({ username, email, password }),
       });
 
-      const data = await response.json(); // Parse the JSON response from the server
+      const data = await response.json();
 
       if (response.ok) {
         onAuthSuccess(data.token);
       } else {
-        // --- START OF CHANGES ---
-        // Check if the backend provided a specific validation error message.
-        // Mongoose validation errors often come under `data.message` or `data.errors`.
-        // Your specific error "User validation failed: password: Path `password` (`12345`) is shorter than the minimum allowed length (6)."
-        // is likely coming as part of `data.message` in the backend's JSON response if it's a generic 500 error,
-        // OR as a specific `message` field if you're explicitly sending it from the backend with a 400 status.
+        let errorMessage = 'Signup failed. Please try again.';
 
-        let errorMessage = 'Signup failed. Please try again.'; // Default message
-
-        // If the backend sends a 'message' field in its error response, use that.
         if (data.message) {
           errorMessage = data.message;
         }
 
-        // Specifically check for validation error details.
-        // Although your backend currently sends a generic `Server error` for validation failures,
-        // a more robust backend might send structured validation errors.
-        // For now, let's just make sure we capture `data.message` effectively.
-
-        // If the error message from the backend specifically mentions "shorter than the minimum allowed length",
-        // we can make it even more user-friendly.
         if (errorMessage.includes('shorter than the minimum allowed length (6)')) {
           errorMessage = 'Password must be at least 6 characters long.';
         } else if (errorMessage.includes('email already exists')) {
-            errorMessage = 'A user with this email already exists.';
+          errorMessage = 'A user with this email already exists.';
         } else if (errorMessage.includes('username is already taken')) {
-            errorMessage = 'This username is already taken.';
+          errorMessage = 'This username is already taken.';
         }
 
-
-        setMessage(errorMessage); // Set the specific or default error message
-        // --- END OF CHANGES ---
+        setMessage(errorMessage);
       }
     } catch (error) {
       setMessage('A network error occurred. Please check your internet connection and try again.');

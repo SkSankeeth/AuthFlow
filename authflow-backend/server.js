@@ -4,7 +4,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const authMiddleware = require('./middleware/auth'); // Import the auth middleware
+const authMiddleware = require('./middleware/auth');
 
 const app = express();
 
@@ -19,9 +19,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 
 // Define a Protected Route
-// This route will only be accessible if the authMiddleware successfully verifies the JWT
 app.get('/api/protected', authMiddleware, (req, res) => {
-  // If we reach here, it means the token was valid, and req.user contains the decoded payload
   res.json({
     message: `Welcome, ${req.user.username || req.user.email}! You have accessed protected data.`,
     userId: req.user.id,
@@ -29,7 +27,6 @@ app.get('/api/protected', authMiddleware, (req, res) => {
   });
 });
 
-// Basic test route (can remain or be removed)
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
