@@ -70,9 +70,9 @@ npm install
 Create a `.env` file in `authflow-backend/`:
 
 ```
-MONGO_URI=mongodb+srv://authuser:12345@authflowcluster.vwnoxym.mongodb.net/authflow_db?retryWrites=true&w=majority&appName=AuthFlowCluster
-JWT_SECRET=somereallylongandcomplexsecretkeyforjwt
-PORT=5000
+MONGO_URI=#################
+JWT_SECRET=#################
+PORT=######
 ```
 
 #### ▶️ Start Backend Server
